@@ -1,0 +1,17 @@
+/vendor
+/bin
+/lib/RetailCrm
+/lib/RetailCrm/*
+composer.lock
+composer.phar
+coverage.xml
+test-report.xml
+phpunit.xml
+.idea
+.DS_Store
+.settings
+.buildpath
+.project
+.swp
+/nbproject
+/ClientAPI/Tests/
