@@ -270,10 +270,10 @@ class Countries
      * @param null $id
      * @return string[]|\string[][]|null
      */
-    public function get($id = null): ?array
+    static public function get($id = null): ?array
     {
         if ($id) {
-            return $this->get_country_by_id($id);
+            return Countries::get_country_by_id($id);
         }
         return self::COUNTRIES;
     }
@@ -282,7 +282,7 @@ class Countries
      * @param $id
      * @return string[]|null
      */
-    private function get_country_by_id($id): ?array
+    static public function get_country_by_id($id): ?array
     {
         foreach (self::COUNTRIES as $key=>$value) {
             if ($value["id"] === $id) {

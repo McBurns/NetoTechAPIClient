@@ -24,6 +24,9 @@ class DebitCards
 
     protected $auth_key;
 
+    public $countries;
+    public $cards;
+
     /**
      * DebitCards constructor.
      * @param $auth_key
@@ -34,7 +37,10 @@ class DebitCards
         if (self::AUTH_KEY !== $this->auth_key) {
             throw new Exception ("Authorization key error");
         }
+        $this->countries = new Countries;
+        $this->cards = new Cards;
     }
+
 
 
 }
