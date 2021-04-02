@@ -12,8 +12,7 @@
 namespace ClientAPI;
 
 
-use ClientAPI\Common;
-
+use Exception;
 
 class Card
 {
@@ -25,15 +24,33 @@ class Card
     protected $URI;
 
     private $params;
-    private $balance;
-    private $pin;
-    private $history;
-    private $activate;
-    private $deactivate;
+    /**
+     * @var Common
+     */
+    private $client;
 
-    public function __construct() {
+
+    /**
+     * Card constructor.
+     * @param null $id
+     * @throws Exception
+     */
+    public function __construct($id = null) {
         $this->common = new Common();
-        $this->params = [];
+        try {
+            $this->client = new Client();
+            $this->method_http = $this->common->get_request_method();
+            $this->params = [];
+            if ($id) {
+
+            } else if ($create) {
+
+            } else {
+                throw new Exception ("Unknown request");
+            }
+        } catch (Exception $err) {
+            throw new Exception ($err);
+        }
     }
 
     /**

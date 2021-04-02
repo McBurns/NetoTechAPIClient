@@ -24,4 +24,8 @@ class Common
         return is_array($array) ?
             array_map('stripslashes_array', $array) : stripslashes($array);
     }
+
+    function get_request_method() {
+        return stripslashes($_SERVER["REQUEST_METHOD"]);
+    }
 }
