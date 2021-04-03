@@ -5,6 +5,8 @@
  * User: Max Burlutsky <max.burlutsky@gmail.com>
  * Date: 02.04.2021
  * Time: 0:34
+ *
+ * Version: 0.0.1
  */
 
 namespace ClientAPI;
@@ -49,6 +51,7 @@ class Country
         $countries = [];
         if ($this->client->get_method() === "GET") {
             $countries = $this->api->country->get();
+var_dump($countries);
         }
         echo $this->client->request($countries);
     }

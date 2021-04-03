@@ -31,7 +31,14 @@ class Cards
     protected $params;
     protected $storage;
 
-    public function __construct() {
+    private $debit_cards;
+
+    /**
+     * Cards constructor.
+     * @param $cards
+     */
+    public function __construct($cards) {
+        $this->debit_cards = $cards;
         $this->init_params();
         $this->init_storage();
     }
@@ -136,9 +143,6 @@ class Cards
 
     private function clear_current_params() {
         $this->params = [];
-        $this->params["pin"] = new Pin();
-        $this->params["balance"] = new Balance();
-        $this->params["history"] = new History();
     }
 
     /**

@@ -12,15 +12,29 @@
 namespace DebitCardsAPI;
 
 
+
 class Balance
 {
+    private $debit_cards;
+
+    /**
+     * Balance constructor.
+     * @param $cards
+     */
+    public function __construct($cards) {
+        $this->debit_cards = $cards;
+    }
+
     /**
      * Dummy function for checking functionality
      *
      * @param $id
-     * @return int|null
+     * @return float|null
      */
-    public function get($id): ?int {
-        return isset($id)? 1000 : null;
+    public function get($id): ?float {
+        if (isset($id)) {
+            return $this->debit_cards->card->get($id)["balance"];
+        }
+        return null;
     }
 }

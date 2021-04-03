@@ -20,7 +20,7 @@ use Exception;
 
 class DebitCards
 {
-    private const AUTH_KEY = array("AUTH_KEY");
+    private const AUTH_KEY = "AUTH_KEY";
 
     protected $auth_key;
 
@@ -40,22 +40,18 @@ class DebitCards
         if (!$this->check_auth_key()) {
             throw new Exception ("Authorization key error");
         }
-        $this->country = new Countries;
-        $this->card = new Cards;
-        $this->pin = new Pin;
-        $this->history = new Cards;
+        $this->country = new Countries($this);
+        $this->card = new Cards($this);
+        $this->balance = new Balance($this);
+        $this->pin = new Pin($this);
+        $this->history = new History($this);
     }
 
     /**
      * @return bool
      */
     private function check_auth_key(): bool {
-        foreach (self::AUTH_KEY as $item) {
-            if ($item === $this->auth_key) {
-                return true;
-            }
-        }
-        return false;
+        return self::AUTH_KEY === $this->auth_key;
     }
 
 

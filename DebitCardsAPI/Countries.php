@@ -268,7 +268,14 @@ class Countries
 
     protected $params;
 
-    public function __construct() {
+    private $debit_cards;
+
+    /**
+     * Cards constructor.
+     * @param $cards
+     */
+    public function __construct($cards) {
+        $this->debit_cards = $cards;
         $this->init_params();
     }
 

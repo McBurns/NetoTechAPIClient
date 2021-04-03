@@ -6,7 +6,7 @@
  * Date: 02.04.2021
  * Time: 0:27
  *
- * Version: 0.0.3
+ * Version: 0.0.2
  */
 
 namespace ClientAPI;
@@ -32,7 +32,7 @@ class Client
     public function __construct() {
         $this->method_http = $this->get_request_method();
         $this->query = $this->init_query();
-        $this->auth_key = isset($this->get_query()["AUTH_KEY"])? '.' . $this->get_query()["AUTH_KEY"] : null;
+        $this->auth_key = isset($this->get_query()["AUTH_KEY"])? '' . $this->get_query()["AUTH_KEY"] : null;
         $this->debit_card = new DebitCards($this->get_auth_key());
         if (!$this->debit_card) {
             throw new Exception ("Authorization key error");

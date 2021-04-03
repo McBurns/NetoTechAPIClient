@@ -14,6 +14,17 @@ namespace DebitCardsAPI;
 
 class Pin
 {
+    private $debit_cards;
+
+    /**
+     * Pin constructor.
+     * @param $cards
+     */
+    public function __construct($cards)
+    {
+        $this->debit_cards = $cards;
+    }
+
     /**
      * Dummy function for checking functionality
      *

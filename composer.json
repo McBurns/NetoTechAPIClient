@@ -1,7 +1,17 @@
 {
+  "name": "mcburns/api_client",
+  "description": "PHP library",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Max Burlutsky",
+      "email": "max.burlutsky@gmail.com"
+    }
+  ],
   "autoload": {
     "psr-4": {
-      "ClientAPI\\": "ClientAPI"
+      "ClientAPI\\": "ClientAPI",
+      "DebitCardsAPI\\": "DebitCardsAPI"
     }
   }
 }

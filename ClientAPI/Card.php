@@ -5,6 +5,8 @@
  * User: Max Burlutsky <max.burlutsky@gmail.com>
  * Date: 01.04.2021
  * Time: 23:20
+ *
+ * Version: 0.0.3
  */
 
 namespace ClientAPI;
@@ -174,8 +176,9 @@ class Card
      */
     private function set_params($data) {
         $this->init_params();
+
         foreach ($data as $key=>$value) {
-            $this[$key] = $value;
+            $this->$key = $value;
         }
     }
 
