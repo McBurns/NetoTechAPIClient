@@ -8,6 +8,9 @@ This is php API client. This library allows to use some API versions.
 For structure and syntax API [check the file](/PHP%20Test.pdf).
 
 ## Usage
+
+For use `index.php` need arguments: `?AUTH_KEY=AUTH_KEY&pin=4444`
+
 ### API documentation
 #### For Countries
 - `/countrues` `[GET]` - a list of the available countries.  
