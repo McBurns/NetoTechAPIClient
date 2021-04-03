@@ -266,14 +266,28 @@ class Countries
         ["id"=>"ZW", "code"=>"ZW", "name" => "ZIMBABWE"]
     );
 
+    protected $params;
+
+    public function __construct() {
+        $this->init_params();
+    }
+
+    private function init_params() {
+        $this->params = [
+            "id" => null,
+            "code" => null,
+            "name" => null
+        ];
+    }
+
     /**
      * @param null $id
      * @return string[]|\string[][]|null
      */
-    static public function get($id = null): ?array
+    public function get($id = null): ?array
     {
         if ($id) {
-            return Countries::get_country_by_id($id);
+            return $this->get_country_by_id($id);
         }
         return self::COUNTRIES;
     }
@@ -282,14 +296,14 @@ class Countries
      * @param $id
      * @return string[]|null
      */
-    static public function get_country_by_id($id): ?array
+    public function get_country_by_id($id): ?array
     {
         foreach (self::COUNTRIES as $key=>$value) {
             if ($value["id"] === $id) {
-                return self::COUNTRIES[$key];
+                $this->params = self::COUNTRIES[$key];
             }
         }
 
-        return null;
+        return $this->params;
     }
 }
