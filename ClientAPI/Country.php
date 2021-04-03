@@ -11,29 +11,49 @@
 
 namespace ClientAPI;
 
+use DebitCardsAPI\DebitCards;
+use Exception;
 
 class Country
 {
+    protected $params;
 
+    private $client;
+    /**
+     * @var DebitCards
+     */
+    private $api;
 
+    /**
+     * Country constructor.
+     * @throws Exception
+     */
     public function __construct() {
-
-    }
-
-    public function get_all_contries() {
-        // $dc_api->countries->get();
-        return self::COUNTRIES;
-    }
-
-    public function get_contry($id_country) {
-        // $dc_api->countries->get($id);
-        if (isset($id_country)) {
-            foreach (self::COUNTRIES as $key=>$value) {
-                if (isset($value["id"]) && $value["id"] === $id_country) {
-                    return self::COUNTRIES[$key];
-                }
-            }
+        try {
+            $this->client = new Client();
+            $this->api = new DebitCards($this->client->get_auth_key());
+        } catch (Exception $err) {
+            throw new Exception ($err);
         }
-        return $this->get_all_contries();
+    }
+
+    /**
+     * API request for all countries unknown.
+     * Use countries->get without parameters.
+     *
+     * @return array|null
+     */
+    public function get_all_countries(): array {
+        return $this->api->country->get();
+    }
+
+    /**
+     * $route['countries/(:any)'] = 'country/get_country/$1';
+     *
+     * @param $id
+     * @return array|null
+     */
+    public function get_country($id): array {
+        return isset($id)? $this->api->country->get($id) : $this->get_all_countries();
     }
 }
