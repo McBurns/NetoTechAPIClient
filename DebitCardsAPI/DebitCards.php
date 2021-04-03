@@ -24,8 +24,11 @@ class DebitCards
 
     protected $auth_key;
 
-    public $countries;
-    public $cards;
+    public $country;
+    public $card;
+    public $balance;
+    public $pin;
+    public $history;
 
     /**
      * DebitCards constructor.
@@ -34,11 +37,25 @@ class DebitCards
      */
     public function __construct($auth_key) {
         $this->auth_key = $auth_key;
-        if (self::AUTH_KEY !== $this->auth_key) {
+        if (!$this->check_auth_key()) {
             throw new Exception ("Authorization key error");
         }
-        $this->countries = new Countries;
-        $this->cards = new Cards;
+        $this->country = new Countries;
+        $this->card = new Cards;
+        $this->pin = new Pin;
+        $this->history = new Cards;
+    }
+
+    /**
+     * @return bool
+     */
+    private function check_auth_key(): bool {
+        foreach (self::AUTH_KEY as $item) {
+            if ($item === $this->auth_key) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
