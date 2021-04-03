@@ -17,21 +17,21 @@ use Exception;
 
 class Card
 {
-    protected $id;
-    protected $first_name;
-    protected $last_name;
-    protected $address;
-    protected $city;
-    protected $country_id;
-    protected $phone;
-    protected $currency;
-    protected $balance;
-    protected $pin;
-    protected $status;
-    protected $history;
+    private $id;
+    private $first_name;
+    private $last_name;
+    private $address;
+    private $city;
+    private $country_id;
+    private $phone;
+    private $currency;
+    private $balance;
+    private $pin;
+    private $status;
 
-    protected $params;
-
+    /**
+     * @var Client
+     */
     private $client;
     /**
      * @var DebitCards
@@ -98,10 +98,11 @@ class Card
      * @param $id
      */
     public function get_history($id) {
+        $history = [];
         if ($this->client->get_method() === "GET") {
-            $this->history = $this->api->history->get($id);
+            $history = $this->api->history->get($id);
         }
-        echo $this->client->request($this->history);
+        echo $this->client->request($history);
     }
 
     /**
@@ -195,6 +196,5 @@ class Card
         $this->balance = null;
         $this->pin = null;
         $this->status = null;
-        $this->history = [];
     }
 }
