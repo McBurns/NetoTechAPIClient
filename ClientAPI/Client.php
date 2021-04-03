@@ -6,7 +6,7 @@
  * Date: 02.04.2021
  * Time: 0:27
  *
- * Version: 0.0.1
+ * Version: 0.0.2
  */
 
 namespace ClientAPI;
@@ -18,7 +18,6 @@ use DebitCardsAPI\DebitCards;
 class Client
 {
     protected $auth_key;
-    protected $common;
     protected $method_http;
     protected $query;
 
@@ -31,11 +30,10 @@ class Client
      * @throws Exception
      */
     public function __construct() {
-        $this->common = new Common();
-        $this->method_http = $this->common->get_request_method();
-        $this->query = $this->get_query();
-        $this->auth_key = isset($this->query["AUTH_KEY"])? '.' . $this->query["AUTH_KEY"] : null;
-        $this->debit_card = new DebitCards($this->auth_key);
+        $this->method_http = $this->get_request_method();
+        $this->query = $this->init_query();
+        $this->auth_key = isset($this->get_query()["AUTH_KEY"])? '.' . $this->get_query()["AUTH_KEY"] : null;
+        $this->debit_card = new DebitCards($this->get_auth_key());
         if (!$this->debit_card) {
             throw new Exception ("Authorization key error");
         }
@@ -46,14 +44,21 @@ class Client
      *
      * @return array|mixed
      */
-    protected function get_query(): array {
+    protected function init_query(): array {
         $query = [];
-        if ($this->method_http === "POST") {
+        if ($this->get_method() === "POST") {
             $query = filter_input_array(INPUT_POST, FILTER_SANITIZE_ENCODED);
-        } elseif ($this->method_http === "GET") {
+        } elseif ($this->get_method() === "GET") {
             $query = filter_input_array(INPUT_GET, FILTER_SANITIZE_ENCODED);
         }
         return $query;
+    }
+
+    /**
+     * @return array
+     */
+    public function get_query(): array {
+        return $this->query;
     }
 
     /**
@@ -64,9 +69,31 @@ class Client
     }
 
     /**
-     * @return string|null
+     * @return string
+     */
+    function get_request_method(): string {
+        return stripslashes($_SERVER["REQUEST_METHOD"]);
+    }
+
+    /**
+     * @return string
      */
     public function get_method(): string {
         return $this->method_http;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    public function request($data): string {
+        $response = '[';
+        foreach ($data as $key=>$value) {
+            $response .= ($response === '[')? '' : ', ';
+            $response .= '"' . $key . '"=>' . $value;
+        }
+        $response .= ']';
+
+        return $response;
     }
 }
