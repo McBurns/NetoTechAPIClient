@@ -126,8 +126,11 @@ class Card
     public function deactivate($id) {
         if ($this->client->get_method() === "POST") {
             $this->api->card->deactivate($id);
+            echo $this->client->request(["status"=>"deactivated"]);
+        } else {
+            echo $this->client->request(["error"=>"need POST request"]);
         }
-        echo $this->client->request(["status"=>"deactivated"]);
+
     }
 
     /**
@@ -138,8 +141,10 @@ class Card
     public function activate($id) {
         if ($this->client->get_method() === "POST") {
             $this->api->card->activate($id);
+            echo $this->client->request(["status"=>"activated"]);
+        } else {
+            echo $this->client->request(["error"=>"need POST request"]);
         }
-        echo $this->client->request(["status"=>"activated"]);
     }
 
     /**
@@ -152,8 +157,10 @@ class Card
         $this->pin = $this->client->get_query()["pin"];
         if ($this->client->get_method() === "POST") {
             $response = $this->api->card->update($this->pin, $id);
+            echo $this->client->request($response);
+        } else {
+            echo $this->client->request(["error"=>"need POST request"]);
         }
-        echo $this->client->request($response);
     }
 
     /**
@@ -165,8 +172,10 @@ class Card
         $response = [];
         if ($this->client->get_method() === "POST") {
             $response = $this->api->card->load($id);
+            echo $this->client->request($response);
+        } else {
+            echo $this->client->request(["error"=>"need POST request"]);
         }
-        echo $this->client->request($response);
     }
 
     /**
