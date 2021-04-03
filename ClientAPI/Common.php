@@ -18,7 +18,7 @@ class Common
      * Return new array with slashed elements.
      *
      * @param $array
-     * @return array
+     * @return array|string
      */
     function stripslashes_array($array): array {
         return is_array($array) ?

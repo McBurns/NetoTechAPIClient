@@ -60,9 +60,9 @@ class Card
      * $route['cards/(:any)/balance'] = 'card/get_balance/$1';
      *
      * @param $id
-     * @return array|null
+     * @return float|null
      */
-    public function get_balance($id): ?array {
+    public function get_balance($id): ?float {
         if ($this->client->get_method() === "GET") {
             return $this->api->balance->get($id);
         }
