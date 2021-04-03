@@ -20,12 +20,15 @@ class Common
      * @param $array
      * @return array
      */
-    function stripslashes_array($array) {
+    function stripslashes_array($array): array {
         return is_array($array) ?
             array_map('stripslashes_array', $array) : stripslashes($array);
     }
 
-    function get_request_method() {
+    /**
+     * @return string
+     */
+    function get_request_method(): string {
         return stripslashes($_SERVER["REQUEST_METHOD"]);
     }
 }
