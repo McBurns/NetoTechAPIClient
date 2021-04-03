@@ -19,8 +19,10 @@ class Country
     protected $id;
     protected $code;
     protected $name;
-    protected $params;
 
+    /**
+     * @var Client
+     */
     private $client;
     /**
      * @var DebitCards
