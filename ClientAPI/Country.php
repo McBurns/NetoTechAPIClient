@@ -16,8 +16,9 @@ use Exception;
 
 class Country
 {
-    protected const COUNTRY_KEYS = array("id", "code", "name");
-
+    protected $id;
+    protected $code;
+    protected $name;
     protected $params;
 
     private $client;
@@ -43,30 +44,38 @@ class Country
     /**
      * API request for all countries unknown.
      * Use countries->get without parameters.
-     *
-     * @return array|null
      */
-    public function get_all_countries(): array {
-        return $this->api->country->get();
+    public function get_all_countries(){
+        $countries = [];
+        if ($this->client->get_method() === "GET") {
+            $countries = $this->api->country->get();
+        }
+        echo $this->client->request($countries);
     }
 
     /**
      * $route['countries/(:any)'] = 'country/get_country/$1';
      *
      * @param $id
-     * @return array|null
      */
-    public function get_country($id): array {
-        return isset($id)? $this->api->country->get($id) : $this->get_all_countries();
+    public function get_country($id) {
+        $country = [];
+        if (isset($id)) {
+            if ($this->client->get_method() === "GET") {
+                $country = $this->api->country->get($id);
+            }
+            echo $this->client->request($country);
+        } else {
+            $this->get_all_countries();
+        }
     }
 
     /**
-     * Resetting parameters
+     * Reset parameters
      */
     private function init_params() {
-        $this->params = [];
-        foreach (self::COUNTRY_KEYS as $value) {
-            $this->params[$value] = null;
-        }
+        $this->id = null;
+        $this->code = null;
+        $this->name = null;
     }
 }
