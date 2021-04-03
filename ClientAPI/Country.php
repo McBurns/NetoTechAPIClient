@@ -16,6 +16,8 @@ use Exception;
 
 class Country
 {
+    protected const COUNTRY_KEYS = array("id", "code", "name");
+
     protected $params;
 
     private $client;
@@ -30,6 +32,7 @@ class Country
      */
     public function __construct() {
         try {
+            $this->init_params();
             $this->client = new Client();
             $this->api = new DebitCards($this->client->get_auth_key());
         } catch (Exception $err) {
@@ -55,5 +58,15 @@ class Country
      */
     public function get_country($id): array {
         return isset($id)? $this->api->country->get($id) : $this->get_all_countries();
+    }
+
+    /**
+     * Resetting parameters
+     */
+    private function init_params() {
+        $this->params = [];
+        foreach (self::COUNTRY_KEYS as $value) {
+            $this->params[$value] = null;
+        }
     }
 }

@@ -17,10 +17,21 @@ use Exception;
 
 class Card
 {
-    const VERSION = "0.0.2";
+    protected const CARD_KEYS = array(
+            "id",
+            "first_name",
+            "last_name",
+            "address",
+            "city",
+            "country_id",
+            "phone",
+            "currency",
+            "balance",
+            "pin",
+            "status"
+    );
 
-    protected $query;
-    protected $URI;
+    protected $params;
 
     private $client;
     /**
@@ -36,6 +47,7 @@ class Card
      */
     public function __construct() {
         try {
+            $this->init_params();
             $this->client = new Client();
             $this->api = new DebitCards($this->client->get_auth_key());
         } catch (Exception $err) {
@@ -47,13 +59,13 @@ class Card
      * $route['cards/(:any)'] = 'card/get/$1';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function get($id): ?array {
+    public function get($id): array {
         if ($this->client->get_method() === "GET") {
             return $this->api->card->get($id);
         }
-        return null;
+        return $this->params;
     }
 
     /**
@@ -66,7 +78,7 @@ class Card
         if ($this->client->get_method() === "GET") {
             return $this->api->balance->get($id);
         }
-        return null;
+        return $this->params["balance"];
     }
 
     /**
@@ -79,86 +91,96 @@ class Card
         if ($this->client->get_method() === "GET") {
             return $this->api->pin->get($id);
         }
-        return null;
+        return $this->params["pin"];
     }
 
     /**
      * $route['cards/(:any)/history'] = 'card/get_history/$1';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function get_history($id): ?array {
+    public function get_history($id): array {
         if ($this->client->get_method() === "GET") {
             return $this->api->history->get($id);
         }
-        return null;
+        return [];
     }
 
     /**
      * $route['cards/create'] = 'card/create';
      *
      * @param $params
-     * @return array|null
+     * @return array
      */
-    public function create($params): ?array {
+    public function create($params): array {
         if ($this->client->get_method() === "POST") {
             return $this->api->card->create($params);
         }
-        return null;
+        return [];
     }
 
     /**
      * $route['cards/:id/deactivate'] = 'card/deactivate';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function deactivate($id): ?array {
+    public function deactivate($id): array {
         if ($this->client->get_method() === "POST") {
             return $this->api->card->deactivate($id);
         }
-        return null;
+        return [];
     }
 
     /**
      * $route['cards/:id/activate'] = 'card/activate';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function activate($id): ?array {
+    public function activate($id): array {
         if ($this->client->get_method() === "POST") {
             return $this->api->card->activate($id);
         }
-        return null;
+        return [];
     }
 
     /**
      * $route['cards/:id/update'] = 'card/update/$1';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function update($id): ?array {
+    public function update($id): array {
         // TODO where is new pin value?
-        $pin = "1234";
+        $this->params->pin = "1234";
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->update($pin, $id);
+            return $this->api->card->update($this->params->pin, $id);
         }
-        return null;
+        return $this->params;
     }
 
     /**
      * $route['cards/:id/load'] = 'card/load/$1';
      *
      * @param $id
-     * @return array|null
+     * @return array
      */
-    public function load($id): ?array {
+    public function load($id): array {
         if ($this->client->get_method() === "POST") {
             return $this->api->card->load($id);
         }
-        return null;
+        return $this->params;
+    }
+
+    /**
+     * Resetting parameters
+     */
+    private function init_params() {
+        $this->params = [];
+        foreach (self::CARD_KEYS as $value) {
+            $this->params[$value] = $value === 'history'? [] : null;
+        }
     }
 }
