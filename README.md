@@ -1,4 +1,4 @@
-[Git repositorie](https://github.com/McBurns/NetoTechAPIClient)
+[Git repository](https://github.com/McBurns/NetoTechAPIClient)
 
 # Test task for the company "Neto Tech" #
 # API PHP client #
