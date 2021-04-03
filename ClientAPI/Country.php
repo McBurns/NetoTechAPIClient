@@ -5,8 +5,6 @@
  * User: Max Burlutsky <max.burlutsky@gmail.com>
  * Date: 02.04.2021
  * Time: 0:34
- *
- * Version: 0.0.1
  */
 
 namespace ClientAPI;
@@ -47,7 +45,7 @@ class Country
      * API request for all countries unknown.
      * Use countries->get without parameters.
      */
-    public function get_all_countries(){
+    public function get_all_countries() {
         $countries = [];
         if ($this->client->get_method() === "GET") {
             $countries = $this->api->country->get();

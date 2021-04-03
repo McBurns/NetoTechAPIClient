@@ -5,8 +5,6 @@
  * User: Max Burlutsky <max.burlutsky@gmail.com>
  * Date: 01.04.2021
  * Time: 23:20
- *
- * Version: 0.0.3
  */
 
 namespace ClientAPI;

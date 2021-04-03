@@ -6,7 +6,7 @@
  * Date: 02.04.2021
  * Time: 0:27
  *
- * Version: 0.0.2
+ * Version: 0.0.3
  */
 
 namespace ClientAPI;
