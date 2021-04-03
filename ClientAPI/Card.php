@@ -12,148 +12,153 @@
 namespace ClientAPI;
 
 
+use DebitCardsAPI\DebitCards;
 use Exception;
 
 class Card
 {
     const VERSION = "0.0.2";
 
-    protected $common;
-    protected $method_http;
     protected $query;
     protected $URI;
 
-    private $params;
-    /**
-     * @var Common
-     */
     private $client;
+    /**
+     * @var DebitCards
+     */
+    private $api;
 
 
     /**
      * Card constructor.
-     * @param null $id
+     *
      * @throws Exception
      */
-    public function __construct($id = null) {
-        $this->common = new Common();
+    public function __construct() {
         try {
             $this->client = new Client();
-            $this->method_http = $this->common->get_request_method();
-            $this->params = [];
-            if ($id) {
-
-            } else if ($create) {
-
-            } else {
-                throw new Exception ("Unknown request");
-            }
+            $this->api = new DebitCards($this->client->get_auth_key());
         } catch (Exception $err) {
             throw new Exception ($err);
         }
     }
 
     /**
+     * $route['cards/(:any)'] = 'card/get/$1';
+     *
      * @param $id
+     * @return array|null
      */
-    protected function set_id($id) {
-        $this->params["id"] = $id;
-    }
-
-    /**
-     * @return null
-     */
-    public function get_id() {
-        // $dc_api->card->id($id);
-        return $this->params->id? $this->params->id : null;
-    }
-
-    /**
-     * @param $balance
-     */
-    protected function set_balance($balance) {
-        $this->params["balance"] = $balance;
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function get_balance($id) {
-        // $dc_api->balance->get($id);
-        return $this->params->balance;
-    }
-
-    /**
-     * @param $pin
-     */
-    protected function set_pin($pin) {
-        // $dc_api->pin->update($id);
-        $this->params["pin"] = $pin;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function get_pin() {
-        // $dc_api->pin->get($id);
-        return $this->params->pin;
-    }
-
-    /**
-     * @param $event
-     */
-    protected function set_history($event) {
-        // $dc_api->history->add($id);
-        if (!isset($this->params["history"])) {
-            $this->params["history"] = [];
+    public function get($id): ?array {
+        if ($this->client->get_method() === "GET") {
+            return $this->api->card->get($id);
         }
-        $this->params["history"][] = $event;
+        return null;
     }
 
     /**
-     * @return mixed
+     * $route['cards/(:any)/balance'] = 'card/get_balance/$1';
+     *
+     * @param $id
+     * @return array|null
      */
-    public function get_history() {
-        // $dc_api->history->get($id);
-        return $this->params->history;
+    public function get_balance($id): ?array {
+        if ($this->client->get_method() === "GET") {
+            return $this->api->balance->get($id);
+        }
+        return null;
     }
 
     /**
+     * $route['cards/(:any)/pin'] = 'card/get_pin/$1';
+     *
+     * @param $id
+     * @return string|null
+     */
+    public function get_pin($id): ?string {
+        if ($this->client->get_method() === "GET") {
+            return $this->api->pin->get($id);
+        }
+        return null;
+    }
+
+    /**
+     * $route['cards/(:any)/history'] = 'card/get_history/$1';
+     *
+     * @param $id
+     * @return array|null
+     */
+    public function get_history($id): ?array {
+        if ($this->client->get_method() === "GET") {
+            return $this->api->history->get($id);
+        }
+        return null;
+    }
+
+    /**
+     * $route['cards/create'] = 'card/create';
+     *
      * @param $params
-     * @return mixed
+     * @return array|null
      */
-    public function create($params) {
-        // $dc_api->card->create($params);
-        return $this->params->history;
+    public function create($params): ?array {
+        if ($this->client->get_method() === "POST") {
+            return $this->api->card->create($params);
+        }
+        return null;
     }
 
     /**
-     * @return mixed
+     * $route['cards/:id/deactivate'] = 'card/deactivate';
+     *
+     * @param $id
+     * @return array|null
      */
-    public function get_activate() {
-        // $dc_api->card->id($id);
-        return $this->params->activate;
+    public function deactivate($id): ?array {
+        if ($this->client->get_method() === "POST") {
+            return $this->api->card->deactivate($id);
+        }
+        return null;
     }
 
     /**
-     * @param $deactivate
+     * $route['cards/:id/activate'] = 'card/activate';
+     *
+     * @param $id
+     * @return array|null
      */
-    protected function set_deactivate($deactivate) {
-        $this->params["activate"] = false;
+    public function activate($id): ?array {
+        if ($this->client->get_method() === "POST") {
+            return $this->api->card->activate($id);
+        }
+        return null;
     }
 
     /**
-     * @param $activate
+     * $route['cards/:id/update'] = 'card/update/$1';
+     *
+     * @param $id
+     * @return array|null
      */
-    protected function set_activate($activate) {
-        $this->params["activate"] = true;
+    public function update($id): ?array {
+        // TODO where is new pin value?
+        $pin = "1234";
+        if ($this->client->get_method() === "POST") {
+            return $this->api->card->update($pin, $id);
+        }
+        return null;
     }
 
     /**
-     * @return mixed
+     * $route['cards/:id/load'] = 'card/load/$1';
+     *
+     * @param $id
+     * @return array|null
      */
-    public function load($id) {
-        // $dc_api->card->load($id);
+    public function load($id): ?array {
+        if ($this->client->get_method() === "POST") {
+            return $this->api->card->load($id);
+        }
+        return null;
     }
 }
