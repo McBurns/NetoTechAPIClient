@@ -6,7 +6,7 @@
  * Date: 01.04.2021
  * Time: 23:20
  *
- * Version: 0.0.2
+ * Version: 0.0.3
  */
 
 namespace ClientAPI;
@@ -17,19 +17,18 @@ use Exception;
 
 class Card
 {
-    protected const CARD_KEYS = array(
-            "id",
-            "first_name",
-            "last_name",
-            "address",
-            "city",
-            "country_id",
-            "phone",
-            "currency",
-            "balance",
-            "pin",
-            "status"
-    );
+    protected $id;
+    protected $first_name;
+    protected $last_name;
+    protected $address;
+    protected $city;
+    protected $country_id;
+    protected $phone;
+    protected $currency;
+    protected $balance;
+    protected $pin;
+    protected $status;
+    protected $history;
 
     protected $params;
 
@@ -59,128 +58,143 @@ class Card
      * $route['cards/(:any)'] = 'card/get/$1';
      *
      * @param $id
-     * @return array
      */
-    public function get($id): array {
+    public function get($id) {
+        $params = [];
         if ($this->client->get_method() === "GET") {
-            return $this->api->card->get($id);
+            $params = $this->api->card->get($id);
+            $this->set_params($params);
         }
-        return $this->params;
+        echo $this->client->request($params);
     }
 
     /**
      * $route['cards/(:any)/balance'] = 'card/get_balance/$1';
      *
      * @param $id
-     * @return float|null
      */
-    public function get_balance($id): ?float {
+    public function get_balance($id) {
         if ($this->client->get_method() === "GET") {
-            return $this->api->balance->get($id);
+            $this->balance = $this->api->balance->get($id);
         }
-        return $this->params["balance"];
+        echo $this->client->request(["balance"=>$this->balance]);
     }
 
     /**
      * $route['cards/(:any)/pin'] = 'card/get_pin/$1';
      *
      * @param $id
-     * @return string|null
      */
-    public function get_pin($id): ?string {
+    public function get_pin($id) {
         if ($this->client->get_method() === "GET") {
-            return $this->api->pin->get($id);
+            $this->pin = $this->api->pin->get($id);
         }
-        return $this->params["pin"];
+        echo $this->client->request(["pin"=>$this->pin]);
     }
 
     /**
      * $route['cards/(:any)/history'] = 'card/get_history/$1';
      *
      * @param $id
-     * @return array
      */
-    public function get_history($id): array {
+    public function get_history($id) {
         if ($this->client->get_method() === "GET") {
-            return $this->api->history->get($id);
+            $this->history = $this->api->history->get($id);
         }
-        return [];
+        echo $this->client->request($this->history);
     }
 
     /**
      * $route['cards/create'] = 'card/create';
      *
      * @param $params
-     * @return array
      */
-    public function create($params): array {
+    public function create($params) {
+        $card = [];
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->create($params);
+            $card = $this->api->card->create($params);
         }
-        return [];
+        echo $this->client->request($card);
     }
 
     /**
      * $route['cards/:id/deactivate'] = 'card/deactivate';
      *
      * @param $id
-     * @return array
      */
-    public function deactivate($id): array {
+    public function deactivate($id) {
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->deactivate($id);
+            $this->api->card->deactivate($id);
         }
-        return [];
+        echo $this->client->request(["status"=>"deactivated"]);
     }
 
     /**
      * $route['cards/:id/activate'] = 'card/activate';
      *
      * @param $id
-     * @return array
      */
-    public function activate($id): array {
+    public function activate($id) {
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->activate($id);
+            $this->api->card->activate($id);
         }
-        return [];
+        echo $this->client->request(["status"=>"activated"]);
     }
 
     /**
      * $route['cards/:id/update'] = 'card/update/$1';
      *
      * @param $id
-     * @return array
      */
-    public function update($id): array {
-        // TODO where is new pin value?
-        $this->params->pin = "1234";
+    public function update($id) {
+        $response = [];
+        $this->pin = $this->client->get_query()["pin"];
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->update($this->params->pin, $id);
+            $response = $this->api->card->update($this->pin, $id);
         }
-        return $this->params;
+        echo $this->client->request($response);
     }
 
     /**
      * $route['cards/:id/load'] = 'card/load/$1';
      *
      * @param $id
-     * @return array
      */
-    public function load($id): array {
+    public function load($id) {
+        $response = [];
         if ($this->client->get_method() === "POST") {
-            return $this->api->card->load($id);
+            $response = $this->api->card->load($id);
         }
-        return $this->params;
+        echo $this->client->request($response);
     }
 
     /**
-     * Resetting parameters
+     * Set params from $data array
+     *
+     * @param $data
+     */
+    private function set_params($data) {
+        $this->init_params();
+        foreach ($data as $key=>$value) {
+            $this[$key] = $value;
+        }
+    }
+
+    /**
+     * Reset parameters
      */
     private function init_params() {
-        $this->params = [];
-        foreach (self::CARD_KEYS as $value) {
-            $this->params[$value] = $value === 'history'? [] : null;
-        }
+        $this->id = null;
+        $this->first_name = null;
+        $this->last_name = null;
+        $this->address = null;
+        $this->city = null;
+        $this->country_id = null;
+        $this->phone = null;
+        $this->currency = null;
+        $this->balance = null;
+        $this->pin = null;
+        $this->status = null;
+        $this->history = [];
     }
 }
