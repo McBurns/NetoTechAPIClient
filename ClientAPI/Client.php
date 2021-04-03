@@ -17,18 +17,12 @@ use DebitCardsAPI\DebitCards;
 
 class Client
 {
-    const VERSION = "0.0.1";
-
     protected $auth_key;
     protected $common;
     protected $method_http;
     protected $query;
-    protected $path;
-    protected $url;
 
     protected $debit_card;
-
-    private $authorize;
 
 
     /**
@@ -45,14 +39,6 @@ class Client
         if (!$this->debit_card) {
             throw new Exception ("Authorization key error");
         }
-        $this->url = $this->get_url();
-        $this->path = $this->get_transformated_array($this->url);
-
-//        if ($this->path["cards"]) {
-//            $this->card = new Card();
-//        } else if ($this->path["countries"]) {
-//            $this->country = new Country();
-//        }
     }
 
     /**
@@ -60,7 +46,7 @@ class Client
      *
      * @return array|mixed
      */
-    protected function get_query() {
+    protected function get_query(): array {
         $query = [];
         if ($this->method_http === "POST") {
             $query = filter_input_array(INPUT_POST, FILTER_SANITIZE_ENCODED);
@@ -71,39 +57,16 @@ class Client
     }
 
     /**
-     * Array parts of script url.
-     *
-     * @return array
+     * @return string|null
      */
-    protected function get_url() {
-        return $this->common->stripslashes_array(
-            explode("/", $_SERVER["PHP_SELF"])
-        );
+    public function get_auth_key(): string {
+        return $this->auth_key;
     }
 
     /**
-     * Revert array [value] => index.
-     *
-     * @param $array
-     * @return array
+     * @return string|null
      */
-    function get_transformated_array($array) {
-        $out = [];
-        foreach ($array as $key=>$value) {
-            if ("index.php" !== $value && "" !== $value) {
-                echo "[$key] = $value<br>";
-                $out[$value] = $key;
-            }
-        }
-        return $out;
-    }
-
-    /**
-     * Authorization flag.
-     *
-     * @return bool
-     */
-    protected function is_authorize() {
-        return $this->authorize;
+    public function get_method(): string {
+        return $this->method_http;
     }
 }
